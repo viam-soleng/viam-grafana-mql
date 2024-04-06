@@ -5,16 +5,14 @@ import {
   DataSourceApi,
   DataSourceInstanceSettings,
   MutableDataFrame,
-  FieldType,
 } from '@grafana/data';
-
 import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY } from './types';
 import {
   ViamClient,
   createViamClient,
   ViamClientOptions
 } from "@viamrobotics/sdk";
-import {BSON} from "bsonfy";
+import {buildFilter} from "./viamData";
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   client: ViamClient | undefined = undefined;
@@ -43,7 +41,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   }
 
   filterQuery(query: MyQuery): boolean {
-    console.debug(`filterQuery(): ${query.queryText}`);
     // if no query has been provided, prevent the query from being executed
     return !!query.queryText;
   }
@@ -53,26 +50,25 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
 
-    const dateMatch = {
-      $match: {
-        time_received: {$gte: new Date(from), $lt: new Date(to)}
-      }
+    let stages: Uint8Array[];
+    let viamResult: any[] | undefined = [];
+    try {
+      stages = buildFilter(from, to, options.targets);
+      viamResult = await this.client?.dataClient?.tabularDataByMQL(
+          this.orgId,
+          stages
+      );
+      console.log(viamResult)
+    } catch(e: any) {
+      throw e;
     }
 
-    const mData = await this.client?.dataClient?.tabularDataByMQL(
-        this.orgId,
-        [BSON.serialize(dateMatch)]
-    );
-    console.log(mData);
-
+    //const fields = buildFrameFields(viamResult);
     // Return a constant for each query.
-    const data = options.targets.map((target) => {
+    const data: MutableDataFrame<any>[] = options.targets.map((target: MyQuery) => {
       return new MutableDataFrame({
         refId: target.refId,
-        fields: [
-          { name: 'Time', values: [from, to], type: FieldType.time },
-          { name: 'Value', values: [target.constant, target.constant], type: FieldType.number },
-        ],
+        fields: [],
       });
     });
     return { data };
@@ -86,3 +82,5 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     };
   }
 }
+
+
