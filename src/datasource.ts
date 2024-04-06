@@ -12,7 +12,7 @@ import {
   createViamClient,
   ViamClientOptions
 } from "@viamrobotics/sdk";
-import {buildFilter} from "./viamData";
+import {buildFilter, buildFrameFields} from "./viamData";
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   client: ViamClient | undefined = undefined;
@@ -51,24 +51,28 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const to = range!.to.valueOf();
 
     let stages: Uint8Array[];
-    let viamResult: any[] | undefined = [];
+    let viamResult: any[] = [];
+
     try {
       stages = buildFilter(from, to, options.targets);
-      viamResult = await this.client?.dataClient?.tabularDataByMQL(
+      const res: any[] | undefined = await this.client?.dataClient?.tabularDataByMQL(
           this.orgId,
           stages
       );
-      console.log(viamResult)
+
+      if (res !== undefined) {
+        viamResult = res;
+      }
     } catch(e: any) {
       throw e;
     }
 
-    //const fields = buildFrameFields(viamResult);
-    // Return a constant for each query.
-    const data: MutableDataFrame<any>[] = options.targets.map((target: MyQuery) => {
+    const fields = buildFrameFields(viamResult);
+    // TODO: move to non deprecated solution
+    const data: MutableDataFrame[] = options.targets.map((target: MyQuery) => {
       return new MutableDataFrame({
         refId: target.refId,
-        fields: [],
+        fields: fields,
       });
     });
     return { data };
