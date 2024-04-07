@@ -55,7 +55,7 @@ export const buildFilter = (from: number, to: number, queries: MyQuery[]): Uint8
 export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) => {
     // [{"$match": {"method_name": "AngularVelocity"}}, {"$limit":5}]
     const fieldsMapping: {[key: string]: number} = {}
-    let fieldIdx: number = 1;
+    let fieldIdx = 1;
     const fields: any = [];
 
 
