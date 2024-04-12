@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import {InlineField, Input, Stack} from '@grafana/ui';
+import {InlineField, Stack, TextArea} from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
 import { MyDataSourceOptions, MyQuery } from '../types';
@@ -7,7 +7,7 @@ import { MyDataSourceOptions, MyQuery } from '../types';
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export function QueryEditor({ query, onChange, onRunQuery }: Props) {
-  const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onQueryTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange({ ...query, queryText: event.target.value });
   };
 
@@ -15,8 +15,8 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
 
   return (
     <Stack gap={0}>
-      <InlineField label="Query Text" labelWidth={16} tooltip="Not used yet">
-        <Input
+      <InlineField label="MQL Query" grow tooltip="Enter your MQL Query">
+        <TextArea
           id="query-editor-query-text"
           width={50}
           onChange={onQueryTextChange}
