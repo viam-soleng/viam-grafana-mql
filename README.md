@@ -11,65 +11,8 @@ Detailed instruction on how to create your own Grafan instance, using the Grafan
 ## How To Create A Dashboard
 See here for detailed instructions on how to configure your own Grafana dashboard displaying Viam data: [Configure a Dashboard](docs/configure-dashboard.md)
 
+## How To Create A Development Environment
+You may want to contribute or create your own signed plugin version. To do so, use these instructions to get started:
+[Create Development Environment]()
 
-## TODO
-1. Testing and improvements
-2. make use of go for backend
 
-## Getting started
-
-### Frontend
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Build plugin in development mode and run in watch mode
-
-   ```bash
-   npm run dev
-   ```
-
-3. Build plugin in production mode
-
-   ```bash
-   npm run build
-   ```
-
-4. Run the tests (using Jest)
-
-   ```bash
-   # Runs the tests and watches for changes, requires git init first
-   npm run test
-
-   # Exits after running all the tests
-   npm run test:ci
-   ```
-
-5. Spin up a Grafana instance and run the plugin inside it (using Docker)
-
-   ```bash
-   npm run server
-   ```
-
-6. Run the E2E tests (using Cypress)
-
-   ```bash
-   # Spins up a Grafana instance first that we tests against
-   npm run server
-
-   # Starts the tests
-   npm run e2e
-   ```
-
-7. Run the linter
-
-   ```bash
-   npm run lint
-
-   # or
-
-   npm run lint:fix
-   ```
