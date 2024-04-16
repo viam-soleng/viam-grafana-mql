@@ -5,9 +5,8 @@ It connects to your Viam organization on [app.viam.com](https://app.viam.com) an
 
 We will continue to make improvements over time therfore please don't hesitate to reach out or submit pull requests with enhancements.
 
-## How To Use the Viam - Grafana Plugin
-
-See here for detailed instructions: [Configure a Dashboard](docs/configure-dashboard.md)
+## How To Create A Dashboard
+See here for detailed instructions on how to configure your own Grafana dashboard displaying Viam data: [Configure a Dashboard](docs/configure-dashboard.md)
 
 
 ## TODO
