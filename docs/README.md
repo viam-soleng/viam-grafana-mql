@@ -30,7 +30,7 @@ docker cp viam-grafana-v0.0.1.tar.gz grafana:/var/lib/grafana/plugins
 tar -xvzf viam-grafana-v0.0.1.tar.gz
 ```
 
-# Create a Grafana Dashboard with Viam Data
+## Create a Grafana Dashboard with Viam Data
 
 Dashboard configuration instructions: [Create a Viam Dashboard](configure-dashboard.md)
 
