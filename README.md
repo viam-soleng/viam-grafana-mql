@@ -10,7 +10,7 @@ Detailed instruction on how to create your own Grafan instance, using the Grafan
 
 [Setup a Grafana Container](docs/README.md)
 
-## Create A Dashboard
+## Configure A Dashboard
 See here for detailed instructions on how to configure your own Grafana dashboard displaying Viam data: 
 
 [Configure a Dashboard](docs/configure-dashboard.md)
