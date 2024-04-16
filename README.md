@@ -1,11 +1,16 @@
-# Grafana Viam data source plugin
+# Grafana Viam Data Source Frontend Plugin
 
-This is a basic example of how to use grafana with the Viam typescript SDK
+This is a first version of an open source Viam - Grafana data source pluging ready for use in self managed environments.
+It connects to your Viam organization on [app.viam.com](https://app.viam.com) and exposes your collected sensor data as source for configuring Grafana dashboards.
 
-We will continue to make improvements over time
+We will continue to make improvements over time therfore please don't hesitate to reach out or submit pull requests with enhancements.
+
+## How To Use the Viam - Grafana Plugin
+
+See here for detailed instructions: [Configure a Dashboard](docs/configure-dashboard.md)
+
 
 ## TODO
-
 1. Testing and improvements
 2. make use of go for backend
 
