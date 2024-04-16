@@ -15,9 +15,9 @@ See here for detailed instructions on how to configure your own Grafana dashboar
 
 [Configure a Dashboard](docs/configure-dashboard.md)
 
-## How To Create A Development Environment
+## Create A Local Development Environment
 You may want to contribute or create your own signed plugin version. To do so, use these instructions to get started:
 
-[Create Development Environment]()
+[Create Development Environment](docs/dev-environment.md)
 
 
