@@ -112,15 +112,8 @@ docker cp viam-grafana-v0.0.1.tar.gz grafana:/var/lib/grafana/plugins
 tar -xvzf viam-grafana-v0.0.1.tar.gz
 ```
 
-## Data Source Configuration
+# Create a Grafana Dashboard with Viam Data
 
-
-## Query Viam Cloud with MQL
-
-
-## Create a Dashboard
-
-
-## Additional Resources
+Dashboard configuration instructions: [Create a Viam Dashboard](configure-dashboard.md)
 
 
