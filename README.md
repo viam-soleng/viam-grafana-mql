@@ -8,7 +8,7 @@ We will continue to make improvements over time therfore please don't hesitate t
 ## Setup Your Personal Grafana Instance (Docker)
 Detailed instruction on how to create your own Grafan instance, using the Grafana docker image in combination with the Viam - Grafana data source plugin: 
 
-[Grafana Setup Instructions](docs/README.md)
+[Setup a Grafana Container](docs/README.md)
 
 ## Create A Dashboard
 See here for detailed instructions on how to configure your own Grafana dashboard displaying Viam data: 
