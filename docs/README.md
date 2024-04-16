@@ -1,9 +1,9 @@
-# Viam-Grafana Plugin: Create Your Private Grafana Instance Including the Viam-Grafana Plugin
+# Create Your Private Grafana Instance
 
 The Viam - Grafana data source plugin is open source and you can install it in any self managed Grafana instance.
 The following instructions help you start your personal local Grafana instance using the official Grafana docker image.
 
-## Install & Run Docker Container
+## Setup Docker Container
 
 ```bash
 # Pull Grafana docker image
@@ -30,7 +30,7 @@ docker cp viam-grafana-v0.0.1.tar.gz grafana:/var/lib/grafana/plugins
 tar -xvzf viam-grafana-v0.0.1.tar.gz
 ```
 
-## Create a Grafana Dashboard with Viam Data
+## Configure a Dashboard with Viam Data
 
 Dashboard configuration instructions: [Create a Viam Dashboard](configure-dashboard.md)
 
