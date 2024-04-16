@@ -20,3 +20,7 @@
 
 7. Wait for the default query to load some data
 ![Config Part 7](./images/plugin-config_7.png)
+
+8. Add your own MQL query as shown on the screenshot
+![Config Part 8](./images/plugin-config_8.png)
+TODO: Seems we don't return the meta data yet
