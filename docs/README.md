@@ -13,7 +13,7 @@ docker pull grafana/grafana
 docker run -d --name=grafana -p 3001:3000 grafana/grafana
 
 # If your plugin version is not signed use this command
-docker run -d --name=grafana -p 3001:3000 -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=viam-viam-datasource grafana/grafana
+docker run -d --name=grafana -p 3001:3000 -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=viam-datasource grafana/grafana
 ```
 
 You can now login to your Grafana instance with username: admin password: admin (Don't forget to change!!) [localhost:3001](http://localhost:3001).
