@@ -13,7 +13,7 @@ docker build -t viam-grafana .
 docker run -d --name=viam-grafana -p 3000:3000 viam-grafana
 ```
 
-You can now login to your Grafana instance with these credentials: admin password: admin (Don't forget to change!!) [localhost:3001](http://localhost:3001).
+You can now login to your Grafana instance with these credentials: admin password: admin (Don't forget to change!!) [localhost:3000](http://localhost:3000).
 
 ## On GCP
 
@@ -36,6 +36,15 @@ docker push ARTIFACTORY-INSTANCE/PROJECT-ID/REPOSITORY-ID/viam-grafana:latest
 You can now login to your Grafana instance with these credentials: admin password: admin
 
 *DO NOT FORGET TO CHANGE THE PASSWORD!*
+
+### Troubleshooting
+**Container Failed to Start**
+
+The user-provided container failed to start and listen on the port defined provided by the PORT=3000 environment variable. Logs for this revision might contain more information.
+Can happen when the image was built on a Mac M1/M2/ARM system.
+
+Solution: Make sure you use the “--platform linux/amd64” parameter if you are building the image on a non amd64 system.
+
 
 ## Finally - Configure a Dashboard Displaying Viam Data
 
