@@ -3,10 +3,10 @@
 To make installation and use of Grafana as simple as possible, we have created a Docker image which includes the Viam-Grafana plugin already.
 Feel free to use and provide feedback / suggestions!
 
-## Local use
+## Local Use
 
 ```
-# Build the image local use
+# Build the image for local use
 docker build -t viam-grafana .
 
 # Run the image locally
