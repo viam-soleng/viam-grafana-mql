@@ -1,36 +1,40 @@
-# Create Your Private Grafana Instance
+# Create Your Own Grafana Server
 
 The Viam - Grafana data source plugin is open source and you can install it in any self managed Grafana instance.
-The following instructions help you start your personal local Grafana instance using the official Grafana docker image.
+The following instructions shoulp help with setting up your own instance on private infrastructure or in the public cloud.
 
-## Setup Docker Container
-
-```bash
-# Pull Grafana docker image
-docker pull grafana/grafana
-
-# Start Grafana instance on port 3001 for use with a signed Viam-Grafana plugin
-docker run -d --name=grafana -p 3001:3000 grafana/grafana
-
-# If your plugin version is not signed use this command
-docker run -d --name=grafana -p 3001:3000 -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=viam-datasource grafana/grafana
-```
-
-You can now login to your Grafana instance with username: admin password: admin (Don't forget to change!!) [localhost:3001](http://localhost:3001).
-
-## Install The Viam-Grafana Plugin
-
-TODO: Maybe a nice way of automating it: https://grafana.com/docs/grafana/latest/setup-grafana/configure-docker/#install-plugins-from-other-sources
+## On Personal Infrastructure
 
 ```bash
-# You must first build and compress the plugin see above
-docker cp viam-grafana-v0.0.1.tar.gz grafana:/var/lib/grafana/plugins
+# Build the image for local use
+docker build -t viam-grafana .
 
-# Extract plugin from inside the docker container
-tar -xvzf viam-grafana-v0.0.1.tar.gz
+# Run the image locally
+docker run -d --name=viam-grafana -p 3000:3000 viam-grafana
 ```
 
-## Configure a Dashboard with Viam Data
+You can now login to your Grafana instance with these credentials: admin password: admin (Don't forget to change!!) [localhost:3001](http://localhost:3001).
+
+## On GCP
+
+Additional useful links:
+
+- [GCP Artifactory - How to upload container images](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
+- [GCP Cloud Run - How to deploy container](https://cloud.google.com/run/docs/deploying)
+
+```
+# Build the image
+docker build -t viam-grafana --platform linux/amd64 .
+
+# Tag the image
+docker tag viam-grafana us-central1-docker.pkg.dev/shared-playground-414521/viam-soleng/viam-grafana:latest
+
+# Upload the image to GCP Artifactory
+docker push ARTIFACTORY-INSTANCE/PROJECT-ID/REPOSITORY-ID/viam-grafana:latest
+```
+
+
+## Finally - Configure a Dashboard Displaying Viam Data
 
 Dashboard configuration instructions: [Create a Viam Dashboard](configure-dashboard.md)
 
