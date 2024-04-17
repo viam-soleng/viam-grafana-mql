@@ -16,8 +16,9 @@ docker run -d --name=viam-grafana -p 3000:3000 viam-grafana
 ## Upload and Run the Image on GCP
 
 Additional useful links:
-[GCP Artifactory - How to upload container images](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
-[GCP Cloud Run - How to deploy container](https://cloud.google.com/run/docs/deploying)
+
+- [GCP Artifactory - How to upload container images](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
+- [GCP Cloud Run - How to deploy container](https://cloud.google.com/run/docs/deploying)
 
 ```
 # Build the image
