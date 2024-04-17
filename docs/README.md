@@ -33,6 +33,9 @@ docker tag viam-grafana us-central1-docker.pkg.dev/shared-playground-414521/viam
 docker push ARTIFACTORY-INSTANCE/PROJECT-ID/REPOSITORY-ID/viam-grafana:latest
 ```
 
+You can now login to your Grafana instance with these credentials: admin password: admin
+
+*DO NOT FORGET TO CHANGE THE PASSWORD!*
 
 ## Finally - Configure a Dashboard Displaying Viam Data
 
