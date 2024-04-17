@@ -3,10 +3,10 @@
 To make installation and use of Grafana as simple as possible, we have created a Docker image which includes the Viam-Grafana plugin already.
 Feel free to use and provide feedback / suggestions!
 
-## Local use
+## Local Use
 
 ```
-# Build the image local use
+# Build the image for local use
 docker build -t viam-grafana .
 
 # Run the image locally
@@ -16,8 +16,9 @@ docker run -d --name=viam-grafana -p 3000:3000 viam-grafana
 ## Upload and Run the Image on GCP
 
 Additional useful links:
-[GCP Artifactory - How to upload container images](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
-[GCP Cloud Run - How to deploy container](https://cloud.google.com/run/docs/deploying)
+
+- [GCP Artifactory - How to upload container images](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images)
+- [GCP Cloud Run - How to deploy container](https://cloud.google.com/run/docs/deploying)
 
 ```
 # Build the image
