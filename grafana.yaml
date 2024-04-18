@@ -32,13 +32,15 @@ spec:
       containers:
         - name: grafana
           # Add your Docker image reference here
-          image: us-central1-docker.pkg.dev/shared-playground-414521/viam-soleng/viam-grafana
+          image: grafana/grafana:latest
           imagePullPolicy: IfNotPresent
           env:
             # Update the value with the location of the plugin zip file
             # If a Github is used, make sure its the "raw" url otherwise the zip file will be broken
             - name: GF_INSTALL_PLUGINS
               value: "https://github.com/felixreichenbach/viam-openalpr/raw/main/viam-datasource-0.0.1.zip;viam-datasource"
+            - name: GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS
+              value: viam-datasource
           ports:
             - containerPort: 3000
               name: http-grafana
