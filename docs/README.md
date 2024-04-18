@@ -15,7 +15,7 @@ docker run -d --name=viam-grafana -p 3000:3000 viam-grafana
 
 You can now login to your Grafana instance with these credentials: admin password: admin (Don't forget to change!!) [localhost:3000](http://localhost:3000).
 
-## Run the Image on GCP Kubernetes Engine "GKE"
+## Deploy to GCP Kubernetes Engine "GKE"
 
 Create a stateful Grafana instance in your private GCP environment.
 The deployment is a stateful set and thus creates a persistent volume which will keep the Grafana persistent on restart / or redeployment of the workload.
