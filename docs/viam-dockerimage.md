@@ -50,18 +50,11 @@ gcloud container clusters get-credentials soleng-grafana \
 Create the deployment:
 
 ```
-kubectl create deployment soleng-grafana \
-    --image=us-central1-docker.pkg.dev/shared-playground-414521/viam-soleng/viam-grafana
+kubectl apply -f viam-grafana-kubdep.yaml
 ```
 
-Expose the deployment:
+The deployment is a stateful set and thus creates a persistent volume which will keep the Grafana persistent on restart / or redeployment of the workload.
 
-```
-kubectl expose deployment soleng-grafana \
-    --type LoadBalancer \
-    --port 80 \
-    --target-port 3000
-```
 
 
 
