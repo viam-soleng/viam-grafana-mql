@@ -58,5 +58,11 @@ docker tag viam-grafana us-central1-docker.pkg.dev/shared-playground-414521/viam
 docker push us-central1-docker.pkg.dev/PROJECT-ID/REPOSITORY-ID/viam-grafana:latest
 ```
 
+## Troubleshooting
+**Container Failed to Start**
 
+The user-provided container failed to start and listen on the port defined provided by the PORT=3000 environment variable. Logs for this revision might contain more information.
+Can happen when the image was built on a Mac M1/M2/ARM system.
+
+Solution: Make sure you use the “--platform linux/amd64” parameter if you are building the image on a non amd64 system.
 
