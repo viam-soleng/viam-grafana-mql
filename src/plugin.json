@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
   "name": "Viam",
-  "id": "viam-viam-datasource",
+  "id": "viam-datasource",
   "metrics": true,
   "info": {
     "description": "Viam data query",

@@ -5,6 +5,7 @@ import {
   DataSourceApi,
   DataSourceInstanceSettings,
   MutableDataFrame,
+
 } from '@grafana/data';
 import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY } from './types';
 import {
@@ -12,7 +13,8 @@ import {
   createViamClient,
   ViamClientOptions
 } from "@viamrobotics/sdk";
-import {buildFilter, buildFrameFields} from "./viamData";
+import { buildFilter, buildFrameFields } from "./viamData";
+import { getTemplateSrv } from '@grafana/runtime';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   client: ViamClient | undefined = undefined;
@@ -45,10 +47,18 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return !!query.queryText;
   }
 
+
+  // Build Grafana Data Source Plugin: 
+  // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-    const { range } = options;
+    let { range, targets } = options;
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
+    // Interpolate Grafana variables
+    // https://community.grafana.com/t/how-to-use-template-variables-in-your-data-source/63250
+    targets.map((query) => {
+      query.queryText = getTemplateSrv().replace(query.queryText);
+    })
 
     let stages: Uint8Array[];
     let viamResult: any[] = [];
@@ -56,26 +66,28 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     try {
       stages = buildFilter(from, to, options.targets);
       const res: any[] | undefined = await this.client?.dataClient?.tabularDataByMQL(
-          this.orgId,
-          stages
+        this.orgId,
+        stages
       );
 
       if (res !== undefined) {
         viamResult = res;
       }
-    } catch(e: any) {
+    } catch (e: any) {
       throw e;
     }
 
     const fields = buildFrameFields(viamResult);
     // TODO: move to non deprecated solution
+    // Grafana documentation: 
+    // https://grafana.com/developers/plugin-tools/create-a-plugin/develop-a-plugin/work-with-data-frames#create-a-data-frame
     const data: MutableDataFrame[] = options.targets.map((target: MyQuery) => {
       return new MutableDataFrame({
         refId: target.refId,
         fields: fields,
       });
     });
-    return { data };
+    return {data};
   }
 
   async testDatasource() {

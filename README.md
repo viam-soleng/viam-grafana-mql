@@ -1,68 +1,23 @@
-# Grafana Viam data source plugin
+# Grafana Viam Data Source Frontend Plugin
 
-This is a basic example of how to use grafana with the Viam typescript SDK
+This is a first version of an open source Viam - Grafana data source pluging ready for use in self managed environments.
+It connects to your Viam organization on [app.viam.com](https://app.viam.com) and exposes your collected sensor data as source for configuring Grafana dashboards.
 
-We will continue to make improvements over time
+We will continue to make improvements over time therfore please don't hesitate to reach out or submit pull requests with enhancements.
 
-## TODO
+## Create Your Personal Grafana Environment
+Detailed instruction on how to create your own Grafana environment, using the provided Grafana docker image including the Viam-Grafana data source plugin: 
 
-1. Testing and improvements
-2. make use of go for backend
+[Create your personal Grafana Instance](docs/README.md)
 
-## Getting started
+## Configure A Dashboard
+See here for detailed instructions on how to configure your own Grafana dashboard displaying Viam data: 
 
-### Frontend
+[Configure a Dashboard](docs/configure-dashboard.md)
 
-1. Install dependencies
+## Create A Local Development Environment
+You may want to contribute or create your own signed plugin version. To do so, use these instructions to get started:
 
-   ```bash
-   npm install
-   ```
+[Create Development Environment](docs/dev-environment.md)
 
-2. Build plugin in development mode and run in watch mode
 
-   ```bash
-   npm run dev
-   ```
-
-3. Build plugin in production mode
-
-   ```bash
-   npm run build
-   ```
-
-4. Run the tests (using Jest)
-
-   ```bash
-   # Runs the tests and watches for changes, requires git init first
-   npm run test
-
-   # Exits after running all the tests
-   npm run test:ci
-   ```
-
-5. Spin up a Grafana instance and run the plugin inside it (using Docker)
-
-   ```bash
-   npm run server
-   ```
-
-6. Run the E2E tests (using Cypress)
-
-   ```bash
-   # Spins up a Grafana instance first that we tests against
-   npm run server
-
-   # Starts the tests
-   npm run e2e
-   ```
-
-7. Run the linter
-
-   ```bash
-   npm run lint
-
-   # or
-
-   npm run lint:fix
-   ```

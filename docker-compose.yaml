@@ -3,7 +3,7 @@ version: '3.0'
 services:
   grafana:
     user: root
-    container_name: 'viam-viam-datasource'
+    container_name: 'viam-datasource'
 
     platform: 'linux/amd64'
     build:
@@ -14,13 +14,13 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/viam-viam-datasource
+      - ./dist:/var/lib/grafana/plugins/viam-datasource
       - ./provisioning:/etc/grafana/provisioning
-      - .:/root/viam-viam-datasource
+      - .:/root/viam-datasource
 
     environment:
       NODE_ENV: development
-      GF_LOG_FILTERS: plugin.viam-viam-datasource:debug
+      GF_LOG_FILTERS: plugin.viam-datasource:debug
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: viam-viam-datasource
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: viam-datasource
