@@ -5,7 +5,7 @@ It connects to your Viam organization on [app.viam.com](https://app.viam.com) an
 
 We will continue to make improvements over time therfore please don't hesitate to reach out or submit pull requests with enhancements.
 
-## Create Your Personal Grafana Environment
+## Deploy Your Own Grafana Environment
 Detailed instruction on how to create your own Grafana environment, using the provided Grafana docker image including the Viam-Grafana data source plugin: 
 
 [Create your personal Grafana Instance](docs/README.md)
