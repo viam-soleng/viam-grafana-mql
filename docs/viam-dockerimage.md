@@ -13,7 +13,7 @@ docker build -t viam-grafana .
 docker run -d --name=viam-grafana -p 3000:3000 viam-grafana
 ```
 
-## Upload and Run the Image on GCP
+## Upload and Run the Image on GCP Cloud Run
 
 Additional useful links:
 
@@ -29,6 +29,38 @@ docker tag viam-grafana us-central1-docker.pkg.dev/shared-playground-414521/viam
 
 # Upload the image to GCP Artifactory
 docker push us-central1-docker.pkg.dev/PROJECT-ID/REPOSITORY-ID/viam-grafana:latest
+```
+
+## Run the Image on GCP Kubernetes Engine GKE
+
+Create a Kubernetes cluster:
+
+```
+gcloud container clusters create-auto soleng-grafana \                                                        
+    --location=us-central1
+```
+
+Get authentication credentials for the cluster:
+
+```
+gcloud container clusters get-credentials soleng-grafana \
+    --location us-central1
+```
+
+Create the deployment:
+
+```
+kubectl create deployment soleng-grafana \
+    --image=us-central1-docker.pkg.dev/shared-playground-414521/viam-soleng/viam-grafana
+```
+
+Expose the deployment:
+
+```
+kubectl expose deployment soleng-grafana \
+    --type LoadBalancer \
+    --port 80 \
+    --target-port 3000
 ```
 
 
