@@ -31,7 +31,10 @@ docker tag viam-grafana us-central1-docker.pkg.dev/shared-playground-414521/viam
 docker push us-central1-docker.pkg.dev/PROJECT-ID/REPOSITORY-ID/viam-grafana:latest
 ```
 
-## Run the Image on GCP Kubernetes Engine GKE
+## Run the Image on GCP Kubernetes Engine "GKE"
+
+Create a stateful Grafana instance in your private GCP environment.
+The deployment is a stateful set and thus creates a persistent volume which will keep the Grafana persistent on restart / or redeployment of the workload.
 
 Create a Kubernetes cluster:
 
@@ -53,7 +56,6 @@ Create the deployment:
 kubectl apply -f viam-grafana-kubdep.yaml
 ```
 
-The deployment is a stateful set and thus creates a persistent volume which will keep the Grafana persistent on restart / or redeployment of the workload.
 
 
 
