@@ -38,7 +38,7 @@ spec:
             # Update the value with the location of the plugin zip file
             # If a Github is used, make sure its the "raw" url otherwise the zip file will be broken
             - name: GF_INSTALL_PLUGINS
-              value: "https://github.com/felixreichenbach/viam-openalpr/raw/main/viam-datasource-0.0.1.zip;viam-datasource"
+              value: "https://github.com/viam-soleng/viam-grafana/raw/main/releases/viam-grafana-0.1.0.zip;viam-datasource"
             - name: GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS
               value: viam-datasource
           ports:
