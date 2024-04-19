@@ -1,6 +1,6 @@
 import { BSON } from 'bsonfy';
 import { MyQuery } from './types';
-import { FieldType } from '@grafana/data';
+import { Field, FieldType } from '@grafana/data';
 
 export const getValues = (obj: any): { [key: string]: any } => {
     const data: { [key: string]: any } = {}
@@ -19,29 +19,28 @@ export const getValues = (obj: any): { [key: string]: any } => {
     return data;
 }
 
-export const buildFilter = (from: number, to: number, queries: MyQuery[]): Uint8Array[] => {
+export const buildBSONAggPipeline = (from: number, to: number, query: MyQuery): Uint8Array[] => {
+    // Aggregation pipeline stages
+    const stages: Uint8Array[] = []
+    // Time range filter -> first stage
     const dateMatch: { [key: string]: any } = {
         $match: {
             time_received: { $gte: new Date(from), $lt: new Date(to) }
         }
     }
-
-    const stages: Uint8Array[] = []
     stages.push(BSON.serialize(dateMatch))
-    queries.forEach((query: MyQuery): void => {
-        if (query.queryText !== undefined && query.queryText.length > 0) {
-            try {
-                let q = JSON.parse(query.queryText);
-                if (q instanceof Array) {
-                    q.forEach(stage => stages.push(BSON.serialize(stage)))
-                } else {
-                    stages.push(BSON.serialize(q))
-                }
-            } catch (e) {
-                throw new Error(`mongo query structure (${query.queryText}) is invalid: ${e}`);
+    if (query.queryText !== undefined && query.queryText.length > 0) {
+        try {
+            let q = JSON.parse(query.queryText);
+            if (q instanceof Array) {
+                q.forEach(stage => stages.push(BSON.serialize(stage)))
+            } else {
+                stages.push(BSON.serialize(q))
             }
+        } catch (e) {
+            throw new Error(`mongo query structure (${query.queryText}) is invalid: ${e}`);
         }
-    });
+    }
     return stages;
 }
 
@@ -55,11 +54,10 @@ export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) =>
     // [{"$match": {"method_name": "AngularVelocity"}}, {"$limit":5}]
     const fieldsMapping: { [key: string]: number } = {}
     let fieldIdx = 1;
-    const fields: any = [];
-
+    let fields: Field[] = [];
 
     if (resultSet !== undefined && resultSet.length > 0) {
-        fields.push({ name: 'Time', values: [], type: FieldType.time })
+        fields.push({ name: 'Time', values: [], type: FieldType.time, config: {} })
         let d = getValues(resultSet[0].data);
         for (let k in d) {
             //TODO: how do we support rich viam types
@@ -75,7 +73,7 @@ export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) =>
             }
 
             if (pushValue) {
-                fields.push({ name: k, values: [], type: type })
+                fields.push({ name: k, values: [], type: type, config: {} })
                 fieldsMapping[k] = fieldIdx;
                 fieldIdx++;
             }
