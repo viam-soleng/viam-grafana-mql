@@ -20,6 +20,7 @@ import { getTemplateSrv } from '@grafana/runtime';
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   client: ViamClient | undefined = undefined;
   orgId: string;
+  instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>;
 
   private createClient = async (instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>): Promise<any> => {
     const opts: ViamClientOptions = {
@@ -35,8 +36,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
+    this.instanceSettings = instanceSettings;
     this.orgId = instanceSettings.jsonData.orgId;
-    this.createClient(instanceSettings);
+    try {
+      this.createClient(instanceSettings);
+    } catch (error) {}
   }
 
   getDefaultQuery(_: CoreApp): Partial<MyQuery> {
@@ -61,7 +65,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const to = range!.to.valueOf();
 
     console.log(JSON.stringify(targets))
+    try {
+      this.createClient(this.instanceSettings);
+    } catch (error) {
 
+    }
     // DataFrame Docs: 
     // https://grafana.com/developers/plugin-tools/create-a-plugin/develop-a-plugin/work-with-data-frames#create-a-data-frame
     let viamResults: DataFrame[] = [];
@@ -83,10 +91,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           length: fields.length
         }
       } else {
-        return { 
-          name: target.refId, 
-          fields: [], 
-          length: 0 
+        return {
+          name: target.refId,
+          fields: [],
+          length: 0
         }
       }
     }));
@@ -95,9 +103,17 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
   async testDatasource() {
     // Implement a health check for your data source.
-    return {
-      status: 'success',
-      message: 'Success',
-    };
+    try {
+      await this.createClient(this.instanceSettings);
+      return {
+        status: 'success',
+        message: 'Connection successfully established!'
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        message: ((error instanceof Error)? error.message:JSON.stringify(error))
+      }
+    }
   }
 }
