@@ -1,10 +1,11 @@
 import {
   CoreApp,
+  DataFrame,
   DataQueryRequest,
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
-  MutableDataFrame,
+  Field,
 
 } from '@grafana/data';
 import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY } from './types';
@@ -47,7 +48,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return !!query.queryText;
   }
 
-
   // Build Grafana Data Source Plugin: 
   // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
@@ -55,7 +55,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
     // Interpolate Grafana variables
-    // https://community.grafana.com/t/how-to-use-template-variables-in-your-data-source/63250
+    // https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-support-for-variables#interpolate-variables-in-data-source-plugins
     targets.map((query) => {
       query.queryText = getTemplateSrv().replace(query.queryText);
     })
@@ -69,7 +69,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         this.orgId,
         stages
       );
-
       if (res !== undefined) {
         viamResult = res;
       }
@@ -77,17 +76,18 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       throw e;
     }
 
-    const fields = buildFrameFields(viamResult);
-    // TODO: move to non deprecated solution
-    // Grafana documentation: 
+    const fields: Field[] = buildFrameFields(viamResult);
+
+    // DataFrame Docs: 
     // https://grafana.com/developers/plugin-tools/create-a-plugin/develop-a-plugin/work-with-data-frames#create-a-data-frame
-    const data: MutableDataFrame[] = options.targets.map((target: MyQuery) => {
-      return new MutableDataFrame({
-        refId: target.refId,
+    let dataFrames: DataFrame[] = options.targets.map((target: MyQuery) => {
+      return {
+        name: target.refId,
         fields: fields,
-      });
-    });
-    return {data};
+        length: fields.length
+      }
+    })
+    return { data: dataFrames }
   }
 
   async testDatasource() {

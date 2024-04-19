@@ -1,6 +1,6 @@
 import { BSON } from 'bsonfy';
 import { MyQuery } from './types';
-import { FieldType } from '@grafana/data';
+import { Field, FieldType } from '@grafana/data';
 
 export const getValues = (obj: any): { [key: string]: any } => {
     const data: { [key: string]: any } = {}
@@ -55,11 +55,10 @@ export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) =>
     // [{"$match": {"method_name": "AngularVelocity"}}, {"$limit":5}]
     const fieldsMapping: { [key: string]: number } = {}
     let fieldIdx = 1;
-    const fields: any = [];
-
+    let fields: Field[] = [];
 
     if (resultSet !== undefined && resultSet.length > 0) {
-        fields.push({ name: 'Time', values: [], type: FieldType.time })
+        fields.push({ name: 'Time', values: [], type: FieldType.time, config: {} })
         let d = getValues(resultSet[0].data);
         for (let k in d) {
             //TODO: how do we support rich viam types
@@ -75,7 +74,7 @@ export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) =>
             }
 
             if (pushValue) {
-                fields.push({ name: k, values: [], type: type })
+                fields.push({ name: k, values: [], type: type, config: {} })
                 fieldsMapping[k] = fieldIdx;
                 fieldIdx++;
             }
