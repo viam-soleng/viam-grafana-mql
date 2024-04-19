@@ -7,7 +7,7 @@ export interface MyQuery extends DataQuery {
 }
 
 export const DEFAULT_QUERY: Partial<MyQuery> = {
-  constant: {"$limit": 1}
+  queryText: "{\"$limit\": 1}"
 };
 
 /**

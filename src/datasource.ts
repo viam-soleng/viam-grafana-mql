@@ -64,7 +64,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
 
-    console.log(JSON.stringify(targets))
     try {
       this.createClient(this.instanceSettings);
     } catch (error) {
