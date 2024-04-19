@@ -32,8 +32,7 @@ gcloud container clusters create-auto soleng-grafana --location=us-central1
 Get authentication credentials for the cluster:
 
 ```
-gcloud container clusters get-credentials soleng-grafana \
-    --location us-central1
+gcloud container clusters get-credentials soleng-grafana --location us-central1
 ```
 
 Create the deployment:
