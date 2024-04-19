@@ -26,8 +26,7 @@ The deployment is a stateful set and thus creates a persistent volume which will
 Create a Kubernetes cluster:
 
 ```
-gcloud container clusters create-auto soleng-grafana \                                                        
-    --location=us-central1
+gcloud container clusters create-auto soleng-grafana --location=us-central1
 ```
 
 Get authentication credentials for the cluster:
