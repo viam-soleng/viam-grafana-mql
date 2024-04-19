@@ -19,29 +19,28 @@ export const getValues = (obj: any): { [key: string]: any } => {
     return data;
 }
 
-export const buildFilter = (from: number, to: number, queries: MyQuery[]): Uint8Array[] => {
+export const buildBSONAggPipeline = (from: number, to: number, query: MyQuery): Uint8Array[] => {
+    // Aggregation pipeline stages
+    const stages: Uint8Array[] = []
+    // Time range filter -> first stage
     const dateMatch: { [key: string]: any } = {
         $match: {
             time_received: { $gte: new Date(from), $lt: new Date(to) }
         }
     }
-
-    const stages: Uint8Array[] = []
     stages.push(BSON.serialize(dateMatch))
-    queries.forEach((query: MyQuery): void => {
-        if (query.queryText !== undefined && query.queryText.length > 0) {
-            try {
-                let q = JSON.parse(query.queryText);
-                if (q instanceof Array) {
-                    q.forEach(stage => stages.push(BSON.serialize(stage)))
-                } else {
-                    stages.push(BSON.serialize(q))
-                }
-            } catch (e) {
-                throw new Error(`mongo query structure (${query.queryText}) is invalid: ${e}`);
+    if (query.queryText !== undefined && query.queryText.length > 0) {
+        try {
+            let q = JSON.parse(query.queryText);
+            if (q instanceof Array) {
+                q.forEach(stage => stages.push(BSON.serialize(stage)))
+            } else {
+                stages.push(BSON.serialize(q))
             }
+        } catch (e) {
+            throw new Error(`mongo query structure (${query.queryText}) is invalid: ${e}`);
         }
-    });
+    }
     return stages;
 }
 

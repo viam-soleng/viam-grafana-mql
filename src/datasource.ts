@@ -14,7 +14,7 @@ import {
   createViamClient,
   ViamClientOptions
 } from "@viamrobotics/sdk";
-import { buildFilter, buildFrameFields } from "./viamData";
+import { buildBSONAggPipeline, buildFrameFields } from "./viamData";
 import { getTemplateSrv } from '@grafana/runtime';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
@@ -52,42 +52,45 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     let { range, targets } = options;
-    const from = range!.from.valueOf();
-    const to = range!.to.valueOf();
     // Interpolate Grafana variables
     // https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-support-for-variables#interpolate-variables-in-data-source-plugins
     targets.map((query) => {
       query.queryText = getTemplateSrv().replace(query.queryText);
     })
+    const from = range!.from.valueOf();
+    const to = range!.to.valueOf();
 
-    let stages: Uint8Array[];
-    let viamResult: any[] = [];
-
-    try {
-      stages = buildFilter(from, to, options.targets);
-      const res: any[] | undefined = await this.client?.dataClient?.tabularDataByMQL(
-        this.orgId,
-        stages
-      );
-      if (res !== undefined) {
-        viamResult = res;
-      }
-    } catch (e: any) {
-      throw e;
-    }
-
-    const fields: Field[] = buildFrameFields(viamResult);
+    console.log(JSON.stringify(targets))
 
     // DataFrame Docs: 
     // https://grafana.com/developers/plugin-tools/create-a-plugin/develop-a-plugin/work-with-data-frames#create-a-data-frame
-    let dataFrames: DataFrame[] = options.targets.map((target: MyQuery) => {
-      return {
-        name: target.refId,
-        fields: fields,
-        length: fields.length
+    let viamResults: DataFrame[] = [];
+
+    viamResults = await Promise.all(options.targets.map(async target => {
+      // Convert MQL queries to BSON
+      const bsonAggPipeline = buildBSONAggPipeline(from, to, target);
+      // Query Viam
+      const result: any[] | undefined = await this.client?.dataClient?.tabularDataByMQL(
+        this.orgId,
+        bsonAggPipeline
+      );
+      if (result !== undefined) {
+        // Return Grafana DataFrame
+        const fields: Field[] = buildFrameFields(result);
+        return {
+          name: target.refId,
+          fields: fields,
+          length: fields.length
+        }
+      } else {
+        return { 
+          name: target.refId, 
+          fields: [], 
+          length: 0 
+        }
       }
-    })
-    return { data: dataFrames }
+    }));
+    return { data: viamResults }
   }
 
   async testDatasource() {
@@ -98,5 +101,3 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     };
   }
 }
-
-
