@@ -17,6 +17,7 @@
 Run the following lines, choosing a password that is at least 8 characters long with 1 uppercase, 1 number, and 1 special character.
 
 `viam data database configure --org-id=<org-id> --password=<db-user-password>`
+
 `viam data database hostname --org-id=<org-id>`
 
 save the chosen password and resulting hostname (your user name for MongoDB will now be db-user-`<org_id>`).
