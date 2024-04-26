@@ -30,6 +30,7 @@ Once a few minute has passed, your data should be available on grafana!
 
 Then
 `show collections;` -> readings
+
 `AtlasDataFederation sensorData> db.readings.findOne()`
 
 
