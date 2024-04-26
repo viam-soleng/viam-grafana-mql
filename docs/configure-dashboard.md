@@ -12,6 +12,22 @@
 4. Save the new data source
 ![Config Part 4](./images/plugin-config_4.png)
 
+5. Configure your database in terminal to be accessible by grafana
+
+Run the following lines, choosing a password that is at least 8 characters long with 1 uppercase, 1 number, and 1 special character.
+
+`viam data database configure --org-id=<org-id> --password=<db-user-password>`
+`viam data database hostname --org-id=<org-id>`
+
+save the chosen password and resulting hostname (your user name for MongoDB will now be db-user-`<org_id>`).
+
+Once a few minute has passed, your data should be available on grafana!
+
+(Optional) Confirm the data federation connection using mongosh:
+
+mongosh mongodb://`<hostname>`/sensorData?authSource=admin\&tls=true -u `<username>>` -p `<password>>`
+
+
 5. Add a new dashboard
 ![Config Part 5](./images/plugin-config_5.png)
 
