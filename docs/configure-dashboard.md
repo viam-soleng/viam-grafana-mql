@@ -24,7 +24,8 @@ save the chosen password and resulting hostname (your user name for MongoDB will
 
 Once a few minute has passed, your data should be available on grafana!
 
-(Optional) Confirm the data federation connection using mongosh:
+
+### (Optional) Confirm the data federation connection using mongosh:
 
 `mongosh mongodb://<hostname>/sensorData?authSource=admin\&tls=true -u <username> -p <password>`
 
