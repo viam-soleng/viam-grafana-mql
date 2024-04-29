@@ -2,7 +2,7 @@
 
 ## Pre-requisite: Configure your database in terminal to be accessible by grafana
 
-Before logging into Grafana to make a dashboard, the data from the desired Vaim organization must be made accessible to the a data federation. To do this, run the following lines, choosing a password that is at least 8 characters long with 1 uppercase, 1 number, and 1 special character.
+Before logging into Grafana to make a dashboard, to enable the data API you must first run the following lines, choosing a password that is at least 8 characters long with 1 uppercase, 1 number, and 1 special character.
 
 `viam data database configure --org-id=<org-id> --password=<db-user-password>`
 
