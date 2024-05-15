@@ -1,5 +1,3 @@
-import { BSON } from 'bsonfy';
-import { MyQuery } from './types';
 import { Field, FieldType } from '@grafana/data';
 
 export const getValues = (obj: any): { [key: string]: any } => {
@@ -19,45 +17,31 @@ export const getValues = (obj: any): { [key: string]: any } => {
     return data;
 }
 
-export const buildBSONAggPipeline = (from: number, to: number, query: MyQuery): Uint8Array[] => {
-    // Aggregation pipeline stages
-    const stages: Uint8Array[] = []
-    // Time range filter -> first stage
-    const dateMatch: { [key: string]: any } = {
-        $match: {
-            time_received: { $gte: new Date(from), $lt: new Date(to) }
-        }
-    }
-    stages.push(BSON.serialize(dateMatch))
-    if (query.queryText !== undefined && query.queryText.length > 0) {
-        try {
-            let q = JSON.parse(query.queryText);
-            if (q instanceof Array) {
-                q.forEach(stage => stages.push(BSON.serialize(stage)))
-            } else {
-                stages.push(BSON.serialize(q))
-            }
-        } catch (e) {
-            throw new Error(`mongo query structure (${query.queryText}) is invalid: ${e}`);
-        }
-    }
-    return stages;
-}
-
 /*
  * buildFramesFields
  * Currently we assume every result is the same as the first result
  * if not the data elements will be ignored
  * TODO: can we improve this?
  */
-export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) => {
+export const buildFrameFields = (resultSet: any[], includeNonNumbers = true) => {
     // [{"$match": {"method_name": "AngularVelocity"}}, {"$limit":5}]
     const fieldsMapping: { [key: string]: number } = {}
     let fieldIdx = 1;
     let fields: Field[] = [];
 
     if (resultSet !== undefined && resultSet.length > 0) {
+        // Set Time field
         fields.push({ name: 'Time', values: [], type: FieldType.time, config: {} })
+        resultSet.forEach((dataItem: { [key: string]: any }): void => {
+            fields[0].values.push(Date.parse(dataItem['timeReceived']));
+            let values: { [key: string]: any } = getValues(dataItem.data);
+            for (let key in values) {
+                if (key in fieldsMapping) {
+                    fields[fieldsMapping[key]].values.push(values[key])
+                }
+            }
+        });
+        console.log(JSON.stringify(resultSet));
         let d = getValues(resultSet[0].data);
         for (let k in d) {
             //TODO: how do we support rich viam types
@@ -78,16 +62,6 @@ export const buildFrameFields = (resultSet: any[], includeNonNumbers = false) =>
                 fieldIdx++;
             }
         }
-
-        resultSet.forEach((dataItem: { [key: string]: any }): void => {
-            fields[0].values.push(Date.parse(dataItem['time_received']));
-            let values: { [key: string]: any } = getValues(dataItem.data);
-            for (let key in values) {
-                if (key in fieldsMapping) {
-                    fields[fieldsMapping[key]].values.push(values[key])
-                }
-            }
-        });
     }
     return fields;
 }
