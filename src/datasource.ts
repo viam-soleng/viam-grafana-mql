@@ -67,7 +67,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     // Execute all queries and return combined results
     viamResults = await Promise.all(options.targets.map(async target => {
       target = defaults(target, DEFAULT_QUERY);
-      console.log("Target: " + JSON.stringify(target));
+      //console.log("Target: " + JSON.stringify(target));
       // Prepare Viam query parameters
       let options: FilterOptions = {
         startTime: from,
@@ -77,9 +77,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       // Execute query if data client initialized
       if (this.client?.dataClient) {
         const filter = this.client.dataClient.createFilter(options);
-        filter.setComponentName(target.componentName);
+        filter.setLocationIdsList(target.locationIdsList)
+        filter.setRobotName(target.robotName) // How about MachineName??
+        filter.setRobotId(target.robotId)   // How about MachineID??
         filter.setPartName(target.partName);
-        filter.setRobotName(target.robotName);
+        filter.setPartId(target.partId);
+        filter.setComponentName(target.componentName);
+        filter.setComponentType(target.componentType);
+        filter.setMethod(target.method);
         const {data,count} = await this.client.dataClient.tabularDataByFilter(filter, undefined);
         // Return Grafana DataFrame
         const fields: Field[] = buildFrameFields(data, target.timeField);
