@@ -56,7 +56,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   // Build Grafana Data Source Plugin: 
   // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-    let { range } = options;
+    let { range, maxDataPoints } = options;
     const from = new Date(range!.from.valueOf());
     const to = new Date(range!.to.valueOf());
     console.log(`FROM: %s \n TO: %s`, from, to)
@@ -85,7 +85,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         filter.setComponentName(target.componentName);
         filter.setComponentType(target.componentType);
         filter.setMethod(target.method);
-        const {data,count} = await this.client.dataClient.tabularDataByFilter(filter, undefined);
+        const {data,count} = await this.client.dataClient.tabularDataByFilter(filter, maxDataPoints);
         // Return Grafana DataFrame
         const fields: Field[] = buildFrameFields(data, target.timeField);
         return {
