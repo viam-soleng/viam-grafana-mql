@@ -56,7 +56,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   // Build Grafana Data Source Plugin: 
   // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-    let { range, targets, maxDataPoints } = options;
+    let { range, targets } = options;
     // Interpolate Grafana variables
     // https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-support-for-variables#interpolate-variables-in-data-source-plugins
     targets.map((query) => {
@@ -65,11 +65,12 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const from = new Date(range!.from.valueOf());
     const to = new Date(range!.to.valueOf());
 
-    console.log(`FROM: %s TO %s`, from, to)
+    console.log(`FROM: %s \n TO: %s`, from, to)
 
     // DataFrame Docs: 
     // https://grafana.com/developers/plugin-tools/create-a-plugin/develop-a-plugin/work-with-data-frames#create-a-data-frame
     let viamResults: DataFrame[] = [];
+    // Execute all queries and return combined results
     viamResults = await Promise.all(options.targets.map(async target => {
       // Query Viam
       let options: FilterOptions = {
@@ -77,11 +78,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         endTime: to,
       };
       if (this.client?.dataClient) {
-        const filter = this.client.dataClient?.createFilter(options);
-        filter.setComponentName("");
+        const filter = this.client.dataClient.createFilter(options);
+        //filter.setComponentName("moisture-sensor");
         //filter.setPartName("");
         //filter.setRobotName("plant-watering-01");
-        var { data, count } = await this.client.dataClient.tabularDataByFilter(filter, undefined);
+        const {data,count} = await this.client.dataClient.tabularDataByFilter(filter, undefined);
         // Return Grafana DataFrame
         const fields: Field[] = buildFrameFields(data);
         return {
