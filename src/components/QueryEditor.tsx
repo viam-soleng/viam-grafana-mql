@@ -99,13 +99,9 @@ export function QueryEditor({ query, onChange }: Props) {
         <InlineField label="Tags" labelWidth={10}>
           <TagsInput tags={tags} onChange={onTagsChange} placeholder="Enter a list of tags" />
         </InlineField>
-      </InlineFieldRow>
-      <InlineFieldRow>
         <InlineField label="Org. IDs" labelWidth={10}>
           <TagsInput tags={organizationIdsList} onChange={onOrgIdChange} placeholder="Enter a list of org. id's" />
         </InlineField>
-      </InlineFieldRow>
-      <InlineFieldRow>
         <InlineField label="Loc. IDs" labelWidth={10}>
           <TagsInput tags={locationIdsList} onChange={onLocationIdChange} placeholder="Enter a list of loc. id's" />
         </InlineField>

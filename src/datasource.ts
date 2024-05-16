@@ -53,29 +53,25 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return !!query.queryText;
   }
 
-  // Build Grafana Data Source Plugin: 
-  // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
+  // Datasource query processing
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     let { range, maxDataPoints } = options;
     const from = new Date(range!.from.valueOf());
     const to = new Date(range!.to.valueOf());
     console.log(`FROM: %s \n TO: %s`, from, to)
 
-    // DataFrame Docs: 
-    // https://grafana.com/developers/plugin-tools/create-a-plugin/develop-a-plugin/work-with-data-frames#create-a-data-frame
-    let viamResults: DataFrame[] = [];
     // Execute all queries and return combined results
+    let viamResults: DataFrame[] = [];
     viamResults = await Promise.all(options.targets.map(async target => {
-      target = defaults(target, DEFAULT_QUERY);
-      //console.log("Target: " + JSON.stringify(target));
-      // Prepare Viam query parameters
-      let options: FilterOptions = {
-        startTime: from,
-        endTime: to,
-        tags: target.tags,
-      };
-      // Execute query if data client initialized
       if (this.client?.dataClient) {
+        target = defaults(target, DEFAULT_QUERY);
+        //console.log("Target: " + JSON.stringify(target));
+        // Prepare Viam query parameters
+        let options: FilterOptions = {
+          startTime: from,
+          endTime: to,
+          tags: target.tags,
+        };
         const filter = this.client.dataClient.createFilter(options);
         filter.setLocationIdsList(target.locationIdsList)
         filter.setRobotName(target.robotName) // How about MachineName??
@@ -85,7 +81,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         filter.setComponentName(target.componentName);
         filter.setComponentType(target.componentType);
         filter.setMethod(target.method);
-        const {data,count} = await this.client.dataClient.tabularDataByFilter(filter, maxDataPoints);
+        // Execute query
+        const { data, count } = await this.client.dataClient.tabularDataByFilter(filter, maxDataPoints);
         // Return Grafana DataFrame
         const fields: Field[] = buildFrameFields(data, target.timeField);
         return {
@@ -104,8 +101,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return { data: viamResults }
   }
 
+  // Test datasource during configuraiton time
   async testDatasource() {
-    // Implement a health check for your data source.
     try {
       await this.createClient(this.instanceSettings);
       return {
