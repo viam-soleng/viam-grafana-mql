@@ -16,7 +16,7 @@ import {
   FilterOptions
 } from "@viamrobotics/sdk";
 import { buildFrameFields } from "./viamData";
-import { getTemplateSrv } from '@grafana/runtime';
+import { defaults } from 'lodash';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   client: ViamClient | undefined = undefined;
@@ -56,15 +56,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   // Build Grafana Data Source Plugin: 
   // https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-plugin#returning-data-frames
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-    let { range, targets } = options;
-    // Interpolate Grafana variables
-    // https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-support-for-variables#interpolate-variables-in-data-source-plugins
-    targets.map((query) => {
-      query.queryText = getTemplateSrv().replace(query.queryText);
-    })
+    let { range } = options;
     const from = new Date(range!.from.valueOf());
     const to = new Date(range!.to.valueOf());
-
     console.log(`FROM: %s \n TO: %s`, from, to)
 
     // DataFrame Docs: 
@@ -72,19 +66,23 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     let viamResults: DataFrame[] = [];
     // Execute all queries and return combined results
     viamResults = await Promise.all(options.targets.map(async target => {
-      // Query Viam
+      target = defaults(target, DEFAULT_QUERY);
+      console.log("Target: " + JSON.stringify(target));
+      // Prepare Viam query parameters
       let options: FilterOptions = {
         startTime: from,
         endTime: to,
+        tags: target.tags,
       };
+      // Execute query if data client initialized
       if (this.client?.dataClient) {
         const filter = this.client.dataClient.createFilter(options);
-        //filter.setComponentName("moisture-sensor");
-        //filter.setPartName("");
-        //filter.setRobotName("plant-watering-01");
+        filter.setComponentName(target.componentName);
+        filter.setPartName(target.partName);
+        filter.setRobotName(target.robotName);
         const {data,count} = await this.client.dataClient.tabularDataByFilter(filter, undefined);
         // Return Grafana DataFrame
-        const fields: Field[] = buildFrameFields(data);
+        const fields: Field[] = buildFrameFields(data, target.timeField);
         return {
           name: target.refId,
           fields: fields,

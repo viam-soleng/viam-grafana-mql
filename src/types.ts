@@ -3,8 +3,6 @@ import { DataQuery } from '@grafana/schema';
 
 export interface MyQuery extends DataQuery {
   queryText?: string;
-  //constant: object;
-
   componentType: string,
   componentName: string,
   method: string,
@@ -16,6 +14,7 @@ export interface MyQuery extends DataQuery {
   organizationIdsList: string[],
   tags: string[],
   datasetId: string,
+  timeField: string,
 }
 
 export const DEFAULT_QUERY: Partial<MyQuery> = {
@@ -30,6 +29,7 @@ export const DEFAULT_QUERY: Partial<MyQuery> = {
   organizationIdsList: [],
   tags: [],
   datasetId: '',
+  timeField: 'timeRequested',
 };
 
 /**
