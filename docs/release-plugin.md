@@ -31,7 +31,7 @@ zip ./releases/viam-grafana-x.x.x.zip viam-datasource -r
 zipinfo releases/viam-grafana-x.x.x.zip
 ```
 To download/reference the zip files use the following url:
-
+https://github.com/viam-soleng/viam-grafana/raw/tabulardatafilter/releases
 https://github.com/viam-soleng/viam-grafana/raw/main/viam-datasource-0.1.0.zip
 
 Otherwise the file will be in the wrong format!
