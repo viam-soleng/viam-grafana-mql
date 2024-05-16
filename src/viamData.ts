@@ -13,7 +13,6 @@ export const buildFrameFields = (resultSet:any[], includeNonNumbers = false) => 
         fields.push({name: "data", values: [], type: FieldType.string, config: {}})
 
         resultSet.forEach((dataItem: { [key: string]: any }): void => {
-            console.log(JSON.stringify(dataItem));
             fields[0].values.push(Date.parse(dataItem['timeRequested']));
             fields[1].values.push(Date.parse(dataItem['timeReceived']));
             fields[2].values.push(dataItem['metadata']);

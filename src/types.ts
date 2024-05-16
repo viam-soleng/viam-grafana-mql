@@ -3,11 +3,33 @@ import { DataQuery } from '@grafana/schema';
 
 export interface MyQuery extends DataQuery {
   queryText?: string;
-  constant: object;
+  //constant: object;
+
+  componentType: string,
+  componentName: string,
+  method: string,
+  robotName: string,
+  robotId: string,
+  partName: string,
+  partId: string,
+  locationIdsList: string[],
+  organizationIdsList: string[],
+  tags: string[],
+  datasetId: string,
 }
 
 export const DEFAULT_QUERY: Partial<MyQuery> = {
-  queryText: "{\"$limit\": 1}"
+  componentType: '',
+  componentName: '',
+  method: '',
+  robotName: '',
+  robotId: '',
+  partName: '',
+  partId: '',
+  locationIdsList: [],
+  organizationIdsList: [],
+  tags: [],
+  datasetId: '',
 };
 
 /**
