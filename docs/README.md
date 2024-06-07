@@ -23,6 +23,8 @@ The deployment is a stateful set and thus creates a persistent volume which will
 ### TODO
 - [ ] [Add SSL certificates](https://estl.tech/configuring-https-to-a-web-service-on-google-kubernetes-engine-2d71849520d)
 
+first thing you have to do is to enable the Kubernetes API in the GCP console / Web UI.
+
 Create a Kubernetes cluster:
 
 ```
