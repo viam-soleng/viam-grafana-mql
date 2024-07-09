@@ -59,8 +59,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     // Interpolate Grafana variables
     // https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-support-for-variables#interpolate-variables-in-data-source-plugins
     targets.map((query) => {
-      query.queryText = getTemplateSrv().replace(query.queryText);
+      query.queryText = getTemplateSrv().replace(query.queryText,options.scopedVars);
     })
+    console.log("Queries: ", targets);
+
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
 
