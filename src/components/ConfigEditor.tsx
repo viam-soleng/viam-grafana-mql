@@ -48,7 +48,7 @@ export function ConfigEditor(props: Props) {
               onChange={onOrgIdChange}
               value={jsonData.orgId}
               width={40}
-              placeholder="enter viam org id"
+              placeholder="Enter viam org id"
           />
         </InlineField>
         <InlineField label="Org API Key ID" labelWidth={20} interactive tooltip={'Viam Organization API Key ID'}>
@@ -58,7 +58,7 @@ export function ConfigEditor(props: Props) {
               onChange={onOrgKeyIdChange}
               value={jsonData.orgKeyId}
               width={40}
-              placeholder="enter viam org api key id"
+              placeholder="Enter viam org api key id"
           />
         </InlineField>
         <InlineField label="Org API Key" labelWidth={20} interactive tooltip={'Viam Organization API Key'}>
