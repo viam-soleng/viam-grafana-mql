@@ -10,6 +10,12 @@ Detailed instruction on how to create your own Grafana environment, using the pr
 
 [Create your personal Grafana Instance](docs/README.md)
 
+**Docker Quick Start**
+
+Deploy the latest Grafana official docker image with the plugin preinstalled:
+
+[Run Docker Image](docs/docker.md)
+
 ## Configure A Dashboard
 See here for detailed instructions on how to configure your own Grafana dashboard displaying Viam data: 
 
